@@ -7,7 +7,7 @@ var logger = require('morgan');
 // const FileStore = require('session-file-store')(session);
 const passport = require('passport');
 // const authenticate = require('./authenticate');
-const config =require('./config');
+const config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -15,7 +15,8 @@ const campsiteRouter = require('./routes/campsiteRouter');
 const promotionRouter = require('./routes/promotionRouter');
 const partnerRouter = require('./routes/partnerRouter');
 const mongoose = require('mongoose');
-const url =  config.mongoUrl;
+
+const url = config.mongoUrl;
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
   useFindAndModify: false,
@@ -64,6 +65,19 @@ app.use('/users', usersRouter);
 //   } else {
 //       return next();
 //   }
+// }
+// function auth(req, res, next) {
+//   console.log(req.user);
+
+//   if (!req.user) {
+//     const err = new Error('You are not authenticated!');
+//     err.status = 401;
+//     return next(err);
+//   } else {
+
+//     return next();
+//   }
+
 // }
 
 // app.use(auth);
