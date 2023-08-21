@@ -10,18 +10,12 @@ const userSchema = new Schema({
     },
     lastname: {
         type: String,
-        default: ''
     },
     admin: {
         type: Boolean,
         default: false
-    },
-    admin: {
-        type: Boolean,
-        default: false
-    }
+    },  
 
-    
  
 });
 userSchema.plugin(passportLocalMongoose);
