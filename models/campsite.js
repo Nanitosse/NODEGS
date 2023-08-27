@@ -40,9 +40,9 @@ const commentSchema = new Schema({
         required:true
     },
     author:{
-        type: String,
-        // ref: "User",
-        required:true
+        type: mongoose.Schema.Types.ObjectId ,
+        ref: "User",
+       
     }
    
 },{
