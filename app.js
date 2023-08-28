@@ -1,12 +1,8 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-// var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-// const session = require('express-session');
-// const FileStore = require('session-file-store')(session);
 const passport = require('passport');
-// const authenticate = require('./authenticate');
 const config = require('./config');
 
 var indexRouter = require('./routes/index');
@@ -17,10 +13,6 @@ const partnerRouter = require('./routes/partnerRouter');
 
 const mongoose = require('mongoose');
 const url = config.mongoUrl;
-
-// const url = 'mongodb://localhost:27017/nucampsite';
-
-
 const connect = mongoose.connect(url, {
   useCreateIndex: true,
   useFindAndModify: false,
@@ -33,7 +25,20 @@ connect.then(() => console.log('Connected correctly to server'),
 );
 
 
-var app = express();
+var app = express()
+ 
+
+
+// redircting all reqest to a secure chanel 
+
+app.all('*', (req, res, next) => {
+  if (req.secure) {
+    return next();
+  } else {
+      console.log(`Redirecting to: https://${req.hostname}:${app.get('secPort')}${req.url}`);
+      res.redirect(301, `https://${req.hostname}:${app.get('secPort')}${req.url}`);
+  }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,21 +47,8 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser('12345-67890-09876-54321'));
-
-
-
-// app.use(session({
-//   name: 'session-id',
-//   secret: '12345-67890-09876-54321',
-//   saveUninitialized: false,
-//   resave: false,
-//   store: new FileStore()
-// }));
-
 
 app.use(passport.initialize());
-// app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -70,7 +62,7 @@ app.use('/partners', partnerRouter);
 
 
 
-// catch 404 and forward to error handler
+
 app.use(function (req, res, next) {
   next(createError(404));
 });
